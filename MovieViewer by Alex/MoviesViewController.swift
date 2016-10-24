@@ -13,7 +13,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var tableView: UITableView!
 
     
-    var movies = [Dictionary]?
+    var movies: [NSDictionary] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,16 +38,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                                         print("response:\(responseDictionary)")
 
 
-self.movies = responseDictionary["results"] as! [Dictionary]
+self.movies = responseDictionary["results"] as! [NSDictionary]
 self.tableView.reloadData()
 
                                         }
-                                    
-                
                 }
                                  
-        } );
-        task.resume ()
+        });
+        task.resume()
         
         
         
@@ -60,18 +58,8 @@ self.tableView.reloadData()
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-if let movies = movies {
-return movies.count
-}
-else {
-return 0
-}
-
-
-
-
-
-return movies.count
+        return movies.count
+ 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
