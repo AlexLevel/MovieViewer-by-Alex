@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AFNetworking
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -63,12 +64,25 @@ self.tableView.reloadData()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        
 
-let movie = movies[indexPath.row]
-let title = movie["title"] as! String
-
-        cell.textLabel!.text = title
+        let movie = movies[indexPath.row]
+        let title = movie["title"] as! String
+        let overview = movie["overview"] as! String
+        let posterPath = movie["poster_path"] as! String
+        
+        let baseUrl = "https://image.tmdb.org/t/p/w342"
+        let imageUrl = NSURL (string: baseUrl + posterPath)
+        
+        
+        
+        cell.titleLabel.text = title
+        cell.overviewLabel.text = overview
+        cell.posterView.setImageWith(imageUrl! as URL)
+        
+        
+        
         print("row\(indexPath.row)")
         return cell
     }
@@ -76,14 +90,17 @@ let title = movie["title"] as! String
     
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+        print("prepare for segue called")
+        
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
+    
 
 }
