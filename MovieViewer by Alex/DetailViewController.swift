@@ -2,93 +2,61 @@
 //  DetailViewController.swift
 //  MovieViewer by Alex
 //
-//  Created by Alex Stepakov on 10/24/16.
+//  Created by Alex Stepakov on 10/25/16.
 //  Copyright © 2016 Alex Stepakov. All rights reserved.
 //
 
 import UIKit
 
-class DetailViewController: UITableViewController {
-    @IBOutlet weak var posterImageView: UIImageView!
+class DetailViewController: UIViewController {
 
-    @IBOutlet weak var titleLabel: UILabel!
     
+    @IBOutlet weak var posterImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var infoView: UIView!
+    
     
     var movie: NSDictionary!
     
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+ 
+        scrollView.contentSize = CGSize (width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
+        
+        let title = movie["title"] as? String
+        titleLabel.text = title
+        
+        
+        let overview = movie["overview"]
+        overviewLabel.text = overview as? String
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        overviewLabel.sizeToFit()
+        
+        
+        let baseUrl = "https://image.tmdb.org/t/p/w342"
+        
+        if let posterPath = movie["poster_path"] as? String {
+            
+            let imageUrl = NSURL (string: baseUrl + posterPath)
+            posterImageView.setImageWith(imageUrl! as URL)
+        }
+        
+        
+        
+        
+        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
+    
 
     /*
     // MARK: - Navigation

@@ -30,11 +30,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             delegate: nil, delegateQueue: OperationQueue.main
         )
         
-        let task: URLSessionDataTask = session.dataTask (with: request,
-                                 completionHandler: { (data0rNil, response, error) in
-                                    if let data = data0rNil {
-                                    if let responseDictionary = try!
-                                        JSONSerialization.jsonObject(with: data, options :[]) as? NSDictionary
+        let task: URLSessionDataTask = session.dataTask (
+            with: request, completionHandler: {
+                (data0rNil, response, error) in
+                if let data = data0rNil {
+                if let responseDictionary = try!
+                JSONSerialization.jsonObject(with: data, options :[]) as? NSDictionary
                                     {
                                         print("response:\(responseDictionary)")
 
@@ -70,16 +71,20 @@ self.tableView.reloadData()
         let movie = movies[indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
-        let posterPath = movie["poster_path"] as! String
-        
+       
         let baseUrl = "https://image.tmdb.org/t/p/w342"
-        let imageUrl = NSURL (string: baseUrl + posterPath)
+        
+        if let posterPath = movie["poster_path"] as? String {
+        
+            let imageUrl = NSURL (string: baseUrl + posterPath)
+            cell.posterView.setImageWith(imageUrl! as URL)
+        }
         
         
         
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
-        cell.posterView.setImageWith(imageUrl! as URL)
+        
         
         
         
@@ -95,7 +100,16 @@ self.tableView.reloadData()
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    
+    let cell = sender as! UITableViewCell
+    let indexPath = tableView.indexPath(for: cell)
+        let movie = movies[indexPath!.row]
+        
+        let detailViewController = segue.destination as! DetailViewController
+        detailViewController.movie = movie
+        
+        
+        
+        
         print("prepare for segue called")
         
         // Get the new view controller using segue.destinationViewController.
